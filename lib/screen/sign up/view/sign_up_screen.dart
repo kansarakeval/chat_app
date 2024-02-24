@@ -1,7 +1,9 @@
 import 'package:chat_app/screen/widget/custom_text_filed.dart';
 import 'package:chat_app/utils/constant.dart';
+import 'package:chat_app/utils/firebase_helper.dart';
 import 'package:chat_app/utils/theme/text_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -11,6 +13,8 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  TextEditingController txtEmail =TextEditingController();
+  TextEditingController txtpassword =TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -42,26 +46,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  CustomTextFiled(label: email),
+                  CustomTextFiled(label: email,controller: txtEmail,),
                   const SizedBox(
                     height: 30,
                   ),
-                  CustomTextFiled(label: password),
+                  CustomTextFiled(label: password,controller: txtpassword,),
                   const SizedBox(
                     height: 30,
                   ),
                   CustomTextFiled(label: confirmpassword),
                   const SizedBox(
-                    height: 177,
+                    height: 100,
                   ),
-                  Container(
-                    height: 48,
-                    width: double.infinity,
-                    color: const Color(0xffF3F6F6),
-                    child: Center(
-                      child: Text(
-                        "$registrationbutton",
-                        style: txtBook16,
+                  InkWell(
+                    onTap: () async {
+                      String msg = await FireHelper.fireHelper.singUp(email: txtEmail.text, password: txtpassword.text);
+                      Get.back();
+                      Get.snackbar(msg,"");
+                    },
+                    child: Container(
+                      height: 48,
+                      width: double.infinity,
+                      color: const Color(0xffF3F6F6),
+                      child: Center(
+                        child: Text(
+                          "$registrationbutton",
+                          style: txtBook16,
+                        ),
                       ),
                     ),
                   ),
@@ -73,16 +84,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-
-  // TextFormField customTextFiled({required String label}) {
-  //   return TextFormField(
-  //     decoration: InputDecoration(
-  //       label: Text(
-  //         "$label",
-  //         style: txtMedium14,
-  //       ),
-  //       labelStyle: txtMedium14,
-  //     ),
-  //   );
-  // }
 }

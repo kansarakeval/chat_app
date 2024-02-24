@@ -1,4 +1,6 @@
+import 'package:chat_app/screen/widget/custom_text_filed.dart';
 import 'package:chat_app/utils/constant.dart';
+import 'package:chat_app/utils/firebase_helper.dart';
 import 'package:chat_app/utils/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +13,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  TextEditingController txtEmail = TextEditingController();
+  TextEditingController txtPassword = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -65,23 +69,32 @@ class _SignInScreenState extends State<SignInScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  customTextFiled(label: email),
+                  CustomTextFiled(label: email,controller: txtEmail,),
                   const SizedBox(
                     height: 30,
                   ),
-                  customTextFiled(label: password),
+                  CustomTextFiled(label: password,controller: txtPassword,),
                   const SizedBox(
-                    height: 177,
+                    height: 100,
                   ),
-                  Container(
-                    height: 48,
-                    width: double.infinity,
-                    color: const Color(0xffF3F6F6),
-                    child: Center(
-                        child: Text(
-                      "$loginbutton",
-                      style: txtBook16,
-                    )),
+                  InkWell(
+                    onTap: () async {
+                      String msg=await FireHelper.fireHelper.singIn(email: txtEmail.text, password: txtPassword.text);
+                      Get.snackbar(msg, "");
+                      if(msg=="success"){
+                        Get.offAllNamed('home');
+                      }
+                    },
+                    child: Container(
+                      height: 48,
+                      width: double.infinity,
+                      color: const Color(0xffF3F6F6),
+                      child: Center(
+                          child: Text(
+                        "$loginbutton",
+                        style: txtBook16,
+                      )),
+                    ),
                   ),
                   const SizedBox(
                     height: 15,
@@ -106,18 +119,6 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  TextFormField customTextFiled({required String label}) {
-    return TextFormField(
-      decoration: InputDecoration(
-        label: Text(
-          "$label",
-          style: txtMedium14,
-        ),
-        labelStyle: txtMedium14,
       ),
     );
   }
