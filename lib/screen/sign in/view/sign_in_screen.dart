@@ -15,6 +15,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   TextEditingController txtEmail = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -28,14 +29,14 @@ class _SignInScreenState extends State<SignInScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "$logintitle",
+                    logintitle,
                     style: txtBold18,
                   ),
                   const SizedBox(
                     height: 15,
                   ),
                   Text(
-                    "$logindec",
+                    logindec,
                     style: txtBook14,
                     textAlign: TextAlign.center,
                   ),
@@ -45,9 +46,18 @@ class _SignInScreenState extends State<SignInScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      socialContainer(),
-                      socialContainer(),
-                      socialContainer(),
+                      InkWell(
+                          onTap: () async {
+                            String msg=await FireHelper.fireHelper.googleSignIn();
+                            Get.snackbar(msg, "Login success fully");
+                            if(msg=="success")
+                              {
+                                Get.offAllNamed('home');
+                              }
+                          },
+                          child: socialContainer("assets/img/google.png")),
+                      socialContainer("assets/img/apple.png"),
+                      socialContainer("assets/img/facebook.png"),
                     ],
                   ),
                   const SizedBox(
@@ -69,19 +79,26 @@ class _SignInScreenState extends State<SignInScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  CustomTextFiled(label: email,controller: txtEmail,),
+                  CustomTextFiled(
+                    label: email,
+                    controller: txtEmail,
+                  ),
                   const SizedBox(
                     height: 30,
                   ),
-                  CustomTextFiled(label: password,controller: txtPassword,),
+                  CustomTextFiled(
+                    label: password,
+                    controller: txtPassword,
+                  ),
                   const SizedBox(
                     height: 100,
                   ),
                   InkWell(
                     onTap: () async {
-                      String msg=await FireHelper.fireHelper.singIn(email: txtEmail.text, password: txtPassword.text);
+                      String msg = await FireHelper.fireHelper.singIn(
+                          email: txtEmail.text, password: txtPassword.text);
                       Get.snackbar(msg, "");
-                      if(msg=="success"){
+                      if (msg == "success") {
                         Get.offAllNamed('home');
                       }
                     },
@@ -91,7 +108,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       color: const Color(0xffF3F6F6),
                       child: Center(
                           child: Text(
-                        "$loginbutton",
+                        loginbutton,
                         style: txtBook16,
                       )),
                     ),
@@ -100,7 +117,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     height: 15,
                   ),
                   Text(
-                    "$forgetpass",
+                    forgetpass,
                     style: txtMedium14,
                   ),
                   const SizedBox(
@@ -111,7 +128,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         Get.toNamed('signup');
                       },
                       child: Text(
-                        "$createNewAccount",
+                        createNewAccount,
                         style: txtMedium14,
                       )),
                 ],
@@ -123,7 +140,7 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Container socialContainer() {
+  Container socialContainer(String path) {
     return Container(
       padding: const EdgeInsets.all(10),
       height: 48,
@@ -133,9 +150,10 @@ class _SignInScreenState extends State<SignInScreen> {
         shape: BoxShape.circle,
         border: Border.all(color: Colors.black, width: 1),
       ),
-      child: Icon(
-        Icons.facebook_outlined,
-        color: Colors.blue.shade900,
+      child: Image.asset(
+        path,
+        height: 45,
+        width: 45,
       ),
     );
   }
