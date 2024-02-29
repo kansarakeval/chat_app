@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:chat_app/utils/firebase_helper.dart';
+import 'package:chat_app/utils/firebase/fireauth_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -16,10 +16,10 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
-    bool isLogin = FireHelper.fireHelper.checkUser();
+    bool isLogin = FireAuthHelper.fireAuthHelper.checkUser();
     Timer(
       Duration(seconds: 3),
-      () => Get.offAllNamed(isLogin==false?'signin':'home'),
+      () => Get.offAllNamed(isLogin==false?'signin':'dash'),
     );
   }
 

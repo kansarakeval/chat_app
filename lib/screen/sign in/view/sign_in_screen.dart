@@ -1,6 +1,6 @@
 import 'package:chat_app/screen/widget/custom_text_filed.dart';
 import 'package:chat_app/utils/constant.dart';
-import 'package:chat_app/utils/firebase_helper.dart';
+import 'package:chat_app/utils/firebase/fireauth_helper.dart';
 import 'package:chat_app/utils/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,11 +48,11 @@ class _SignInScreenState extends State<SignInScreen> {
                     children: [
                       InkWell(
                           onTap: () async {
-                            String msg=await FireHelper.fireHelper.googleSignIn();
+                            String msg=await FireAuthHelper.fireAuthHelper.googleSignIn();
                             Get.snackbar(msg, "Login success fully");
                             if(msg=="success")
                               {
-                                Get.offAllNamed('home');
+                                Get.offAllNamed('dash');
                               }
                           },
                           child: socialContainer("assets/img/google.png")),
@@ -95,11 +95,11 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   InkWell(
                     onTap: () async {
-                      String msg = await FireHelper.fireHelper.singIn(
+                      String msg = await FireAuthHelper.fireAuthHelper.singIn(
                           email: txtEmail.text, password: txtPassword.text);
                       Get.snackbar(msg, "");
                       if (msg == "success") {
-                        Get.offAllNamed('home');
+                        Get.offAllNamed('dash');
                       }
                     },
                     child: Container(

@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class FireHelper {
-  static FireHelper fireHelper = FireHelper._();
+class FireAuthHelper {
+  static FireAuthHelper fireAuthHelper = FireAuthHelper._();
 
-  FireHelper._();
+  FireAuthHelper._();
 
   FirebaseAuth auth = FirebaseAuth.instance;
+  User? user;
 
   Future<String> singUp(
       {required String email, required String password}) async {
@@ -34,7 +35,7 @@ class FireHelper {
   }
 
   bool checkUser() {
-    User? user = auth.currentUser;
+    user = auth.currentUser;
     return user != null;
   }
 

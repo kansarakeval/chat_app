@@ -1,6 +1,6 @@
 import 'package:chat_app/screen/widget/custom_text_filed.dart';
 import 'package:chat_app/utils/constant.dart';
-import 'package:chat_app/utils/firebase_helper.dart';
+import 'package:chat_app/utils/firebase/fireauth_helper.dart';
 import 'package:chat_app/utils/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -60,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   InkWell(
                     onTap: () async {
-                      String msg = await FireHelper.fireHelper.singUp(email: txtEmail.text, password: txtpassword.text);
+                      String msg = await FireAuthHelper.fireAuthHelper.singUp(email: txtEmail.text, password: txtpassword.text);
                       Get.back();
                       Get.snackbar(msg,"");
                     },
