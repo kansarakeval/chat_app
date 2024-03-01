@@ -12,7 +12,10 @@ class FireDbHelper {
   FirebaseFirestore fireDb = FirebaseFirestore.instance;
 
   Future<void> addProfileData(ProfileModel p1) async {
-   await fireDb.collection("user").doc("${FireAuthHelper.fireAuthHelper.user!.uid}").set(
+    await fireDb
+        .collection("user")
+        .doc("${FireAuthHelper.fireAuthHelper.user!.uid}")
+        .set(
       {
         "name": p1.name,
         "mobile": p1.mobile,
@@ -24,9 +27,16 @@ class FireDbHelper {
     );
   }
 
-  Future<dynamic> getProfileData() async {
-    DocumentSnapshot ds =await fireDb.collection("user").doc("${FireAuthHelper.fireAuthHelper.user!.uid}").get();
-    dynamic m1 = ds.data() ;
-    return m1;
+  Stream<DocumentSnapshot<Map>> getProfileData()  {
+    Stream<DocumentSnapshot<Map>> data =  fireDb
+        .collection("user")
+        .doc("${FireAuthHelper.fireAuthHelper.user!.uid}")
+        .snapshots();
+    return data;
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllProfile(){
+    return fireDb.collection("user").where("id",isNotEqualTo: FireAuthHelper.fireAuthHelper.user!.uid).snapshots();
+
   }
 }
