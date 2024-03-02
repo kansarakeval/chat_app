@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     bool isLogin = FireAuthHelper.fireAuthHelper.checkUser();
     Timer(
       Duration(seconds: 3),
-      () => Get.offAllNamed(isLogin==false?'signin':'dash'),
+      () => Get.offAllNamed(isLogin==false?'signin':'profile'),
     );
   }
 

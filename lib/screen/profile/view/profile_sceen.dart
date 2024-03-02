@@ -1,7 +1,9 @@
+import 'package:chat_app/screen/profile/controller/profile_controller.dart';
 import 'package:chat_app/screen/profile/model/profile_model.dart';
 import 'package:chat_app/screen/widget/custom_text_filed.dart';
 import 'package:chat_app/utils/firebase/firedb_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -18,6 +20,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController txtAddress = TextEditingController();
   TextEditingController txtImage = TextEditingController();
 
+  ProfileController controller = Get.put(ProfileController());
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+  Future<void> getData() async {
+    await controller.getProfileData();
+    if (controller.data.value != null) {
+      txtName.text = controller.data.value!['name'];
+      txtBio.text = controller.data.value!['bio'];
+      txtMobile.text = controller.data.value!['mobile'];
+      txtEmail.text = controller.data.value!['email'];
+      txtAddress.text = controller.data.value!['address'];
+      txtImage.text = controller.data.value!['image'];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,49 +50,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                ),
-                CustomTextFiled(
-                  label: "Name",
-                  controller: txtName,
-                ),
-                CustomTextFiled(
-                  label: "Mobile",
-                  controller: txtMobile,
-                ),
-                CustomTextFiled(
-                  label: "Bio",
-                  controller: txtBio,
-                ),
-                CustomTextFiled(
-                  label: "Email",
-                  controller: txtEmail,
-                ),
-                CustomTextFiled(
-                  label: "Address",
-                  controller: txtAddress,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    ProfileModel p1 = ProfileModel(
-                      name: txtName.text,
-                      mobile: txtMobile.text,
-                      bio: txtBio.text,
-                      email: txtEmail.text,
-                      address: txtAddress.text,
-                      image: txtImage.text,
-                    );
-                    FireDbHelper.fireDbHelper.addProfileData(p1);
-                  },
-                  child: Text("Save"),
-                ),
-              ],
+            child: Obx(
+              () => controller.data.value == null
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                        ),
+                        CustomTextFiled(
+                          label: "Name",
+                          controller: txtName,
+                        ),
+                        CustomTextFiled(
+                          label: "Mobile",
+                          controller: txtMobile,
+                        ),
+                        CustomTextFiled(
+                          label: "Bio",
+                          controller: txtBio,
+                        ),
+                        CustomTextFiled(
+                          label: "Email",
+                          controller: txtEmail,
+                        ),
+                        CustomTextFiled(
+                          label: "Address",
+                          controller: txtAddress,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            ProfileModel p1 = ProfileModel(
+                              name: txtName.text,
+                              mobile: txtMobile.text,
+                              bio: txtBio.text,
+                              email: txtEmail.text,
+                              address: txtAddress.text,
+                              image: txtImage.text,
+                            );
+                            FireDbHelper.fireDbHelper.addProfileData(p1);
+                            Get.offAllNamed('dash');
+                          },
+                          child: Text("Save"),
+                        ),
+                      ],
+                    ),
             ),
           ),
         ),

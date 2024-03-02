@@ -52,7 +52,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             Get.snackbar(msg, "Login success fully");
                             if(msg=="success")
                               {
-                                Get.offAllNamed('dash');
+                                Get.offAllNamed('profile');
                               }
                           },
                           child: socialContainer("assets/img/google.png")),
@@ -99,7 +99,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           email: txtEmail.text, password: txtPassword.text);
                       Get.snackbar(msg, "");
                       if (msg == "success") {
-                        Get.offAllNamed('dash');
+                        Get.offAllNamed('profile');
                       }
                     },
                     child: Container(

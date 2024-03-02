@@ -4,6 +4,7 @@ import 'package:chat_app/utils/firebase/firedb_helper.dart';
 import 'package:chat_app/utils/theme/text_theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
@@ -17,7 +18,7 @@ class _ContactScreenState extends State<ContactScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Contact"),
+          title: const Text("Contact"),
           centerTitle: true,
         ),
         body: StreamBuilder(
@@ -48,6 +49,9 @@ class _ContactScreenState extends State<ContactScreen> {
                 itemCount: userData.length,
                 itemBuilder: (context, index) {
                   return ListTile(
+                    onTap: () {
+                      Get.toNamed('chat',arguments: userData[index]);
+                    },
                     leading: userData[index].image != null
                         ? CircleAvatar(
                             radius: 30,
@@ -58,7 +62,7 @@ class _ContactScreenState extends State<ContactScreen> {
                             radius: 30,
                             child: Text(
                               "${userData[index].name!.substring(0, 1)}",
-                              style: TextStyle(color: Colors.black87),
+                              style: const TextStyle(color: Colors.black87),
                             ),
                           ),
                     title: Text("${userData[index].name}",style: txtBold18,),
@@ -67,7 +71,7 @@ class _ContactScreenState extends State<ContactScreen> {
                 },
               );
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },
