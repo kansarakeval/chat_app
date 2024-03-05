@@ -1,6 +1,7 @@
 import 'package:chat_app/screen/profile/controller/profile_controller.dart';
 import 'package:chat_app/screen/profile/model/profile_model.dart';
 import 'package:chat_app/screen/widget/custom_text_filed.dart';
+import 'package:chat_app/utils/firebase/fireauth_helper.dart';
 import 'package:chat_app/utils/firebase/firedb_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -52,9 +53,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: SingleChildScrollView(
             child: Obx(
               () => controller.data.value == null
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
+                  ? Column(
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                  ),
+                  CustomTextFiled(
+                    label: "Name",
+                    controller: txtName,
+                  ),
+                  CustomTextFiled(
+                    label: "Mobile",
+                    controller: txtMobile,
+                  ),
+                  CustomTextFiled(
+                    label: "Bio",
+                    controller: txtBio,
+                  ),
+                  CustomTextFiled(
+                    label: "Email",
+                    controller: txtEmail,
+                  ),
+                  CustomTextFiled(
+                    label: "Address",
+                    controller: txtAddress,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      ProfileModel p1 = ProfileModel(
+                        uid: FireAuthHelper.fireAuthHelper.user!.uid,
+                        name: txtName.text,
+                        mobile: txtMobile.text,
+                        bio: txtBio.text,
+                        email: txtEmail.text,
+                        address: txtAddress.text,
+                        image: txtImage.text,
+                      );
+                      FireDbHelper.fireDbHelper.addProfileData(p1);
+                      Get.offAllNamed('dash');
+                    },
+                    child: Text("Save"),
+                  ),
+                ],
+              )
                   : Column(
                       children: [
                         CircleAvatar(
@@ -86,6 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ElevatedButton(
                           onPressed: () {
                             ProfileModel p1 = ProfileModel(
+                              uid: FireAuthHelper.fireAuthHelper.user!.uid,
                               name: txtName.text,
                               mobile: txtMobile.text,
                               bio: txtBio.text,

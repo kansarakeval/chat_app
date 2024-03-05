@@ -16,6 +16,7 @@ class FireDbHelper {
         .doc("${FireAuthHelper.fireAuthHelper.user!.uid}")
         .set(
       {
+        "uid":p1.uid,
         "name": p1.name,
         "mobile": p1.mobile,
         "bio": p1.bio,
@@ -66,5 +67,10 @@ class FireDbHelper {
       "date": chatModel.date,
       "time": chatModel.time
     });
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> readChatContact()
+  {
+   return fireDb.collection("chat").snapshots();
   }
 }
