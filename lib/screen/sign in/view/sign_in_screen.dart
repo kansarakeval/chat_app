@@ -52,6 +52,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             Get.snackbar(msg, "Login success fully");
                             if(msg=="success")
                               {
+                                FireAuthHelper.fireAuthHelper.checkUser();
                                 Get.offAllNamed('profile');
                               }
                           },
@@ -99,6 +100,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           email: txtEmail.text, password: txtPassword.text);
                       Get.snackbar(msg, "");
                       if (msg == "success") {
+                        FireAuthHelper.fireAuthHelper.checkUser();
                         Get.offAllNamed('profile');
                       }
                     },

@@ -16,12 +16,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getProfileData();
+    getProfile();
   }
 
-  Future<void> getProfileData() async {
-    await FireAuthHelper.fireAuthHelper.checkUser();
-    await FireDbHelper.fireDbHelper.getProfileData();
+  Future<void> getProfile() async {
+    await FireDbHelper.fireDbHelper.myProfileData;
   }
 
   @override
@@ -43,34 +42,34 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        body: StreamBuilder(
-          stream: FireDbHelper.fireDbHelper.readChatContact(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            } else if (snapshot.hasData) {
-              List<String> id = [];
-              QuerySnapshot? querySnapshot = snapshot.data;
-              List<QueryDocumentSnapshot> data = querySnapshot!.docs;
-
-              for (var x in data) {
-                id.add(x.id);
-              }
-              return ListView.builder(
-                itemCount: id.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text("${id[index].split(":")[0]}"),
-                    subtitle: Text("${id[index].split(":")[1]}"),
-                  );
-                },
-              );
-            }
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        ),
+        // body: StreamBuilder(
+        //   stream: FireDbHelper.fireDbHelper.readChatContact(),
+        //   builder: (context, snapshot) {
+        //     if (snapshot.hasError) {
+        //       return Text("${snapshot.error}");
+        //     } else if (snapshot.hasData) {
+        //       List<String> id = [];
+        //       QuerySnapshot? querySnapshot = snapshot.data;
+        //       List<QueryDocumentSnapshot> data = querySnapshot!.docs;
+        //
+        //       for (var x in data) {
+        //         id.add(x.id);
+        //       }
+        //       return ListView.builder(
+        //         itemCount: id.length,
+        //         itemBuilder: (context, index) {
+        //           return ListTile(
+        //             title: Text("${id[index].split(":")[0]}"),
+        //             subtitle: Text("${id[index].split(":")[1]}"),
+        //           );
+        //         },
+        //       );
+        //     }
+        //     return Center(
+        //       child: CircularProgressIndicator(),
+        //     );
+        //   },
+        // ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Get.toNamed('contact');
@@ -133,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const CircularProgressIndicator();
                 },
               )),
-        ));
+        ),
+    );
   }
 }

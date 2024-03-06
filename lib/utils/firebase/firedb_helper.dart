@@ -10,13 +10,15 @@ class FireDbHelper {
 
   FirebaseFirestore fireDb = FirebaseFirestore.instance;
 
+  ProfileModel myProfileData = ProfileModel();
+
   Future<void> addProfileData(ProfileModel p1) async {
     await fireDb
         .collection("user")
         .doc("${FireAuthHelper.fireAuthHelper.user!.uid}")
         .set(
       {
-        "uid":p1.uid,
+        "uid": p1.uid,
         "name": p1.name,
         "mobile": p1.mobile,
         "bio": p1.bio,
@@ -27,50 +29,74 @@ class FireDbHelper {
     );
   }
 
-  Stream<DocumentSnapshot<Map>> getProfileData() {
-    Stream<DocumentSnapshot<Map>> data = fireDb
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getProfileData() {
+    return fireDb
         .collection("user")
         .doc("${FireAuthHelper.fireAuthHelper.user!.uid}")
         .snapshots();
-    return data;
   }
 
-  Future<Map?> getProfile() async {
-    FireAuthHelper.fireAuthHelper.checkUser();
-    DocumentSnapshot? ds = await fireDb
-            .collection("user")
-            .doc(FireAuthHelper.fireAuthHelper.user!.uid)
-            .get() ??
-        null;
-    if (ds != null) {
-      Map data = ds.data() as Map;
-      return data;
-    }
-    return null;
-  }
-
-  Stream<QuerySnapshot<Map<String, dynamic>>> getAllProfile() {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllContact() {
     return fireDb
         .collection("user")
-        .where("id", isNotEqualTo: FireAuthHelper.fireAuthHelper.user!.uid)
+        .where("uid",
+            isNotEqualTo: "${FireAuthHelper.fireAuthHelper.user!.uid}")
         .snapshots();
   }
 
-  void sendMassage({required String fuid, required ChatModel chatModel}) {
-    fireDb
-        .collection("chat")
-        .doc("${FireAuthHelper.fireAuthHelper.user!.uid}:$fuid}")
-        .collection("message")
-        .add({
-      "name": chatModel.name,
-      "msg": chatModel.msg,
-      "date": chatModel.date,
-      "time": chatModel.time
-    });
+  Future<void> getProfile() async {
+    DocumentSnapshot ds = await fireDb
+        .collection("user")
+        .doc("${FireAuthHelper.fireAuthHelper.user!.uid}")
+        .get();
+
+    Map? data = ds.data() as Map?;
+
+    if (data != null) {
+      myProfileData = ProfileModel(
+        name: data['name'],
+        address: data['address'],
+        bio: data['bio'],
+        email: data['email'],
+        image: data['image'],
+        mobile: data['mobile'],
+        uid: data['id'],
+      );
+    }
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> readChatContact()
-  {
-   return fireDb.collection("chat").snapshots();
+  Future<void> sendMessage(
+      ChatModel? model, ProfileModel? myProfile, ProfileModel? fProfile) async {
+    String myUid = FireAuthHelper.fireAuthHelper.user!.uid;
+    await fireDb
+        .collection("chat")
+        .doc("$myUid-${fProfile!.uid}")
+        .collection("message")
+        .add({
+      "msg": model!.msg,
+      "name": model.name,
+      "date": model.date,
+      "time": model.time,
+    });
+    await fireDb.collection("chat").doc("$myUid-${fProfile.uid}").set({
+      'date1': [
+        myProfile!.name,
+        myProfile.uid,
+        myProfile.image,
+        myProfile.address,
+        myProfile.bio,
+        myProfile.email,
+        myProfile.mobile
+      ],
+      'date2': [
+        fProfile.name,
+        fProfile.uid,
+        fProfile.image,
+        fProfile.address,
+        fProfile.bio,
+        fProfile.email,
+        fProfile.mobile
+      ]
+    });
   }
 }

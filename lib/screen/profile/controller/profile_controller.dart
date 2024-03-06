@@ -5,7 +5,7 @@ class ProfileController extends GetxController {
 
   Rxn<Map> data = Rxn();
 
-  Future<void> getProfileData() async {
-    data.value = await FireDbHelper.fireDbHelper.getProfile();
-  }
+  // Future<void> getProfileData() async {
+  //   data.value = await FireDbHelper.fireDbHelper.getProfile();
+  // }
 }
