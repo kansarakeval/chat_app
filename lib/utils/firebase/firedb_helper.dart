@@ -60,7 +60,7 @@ class FireDbHelper {
         email: data['email'],
         image: data['image'],
         mobile: data['mobile'],
-        uid: data['id'],
+        uid: data['uid'],
       );
     }
   }

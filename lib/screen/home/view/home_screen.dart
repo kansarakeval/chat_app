@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> getProfile() async {
-    await FireDbHelper.fireDbHelper.myProfileData;
+    await FireDbHelper.fireDbHelper.getProfile();
   }
 
   @override
