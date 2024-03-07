@@ -70,15 +70,16 @@ class FireDbHelper {
     String myUid = FireAuthHelper.fireAuthHelper.user!.uid;
     await fireDb
         .collection("chat")
-        .doc("$myUid-${fProfile!.uid}")
+        .doc(fProfile!.docId!=null?fProfile.docId:"$myUid-${fProfile.uid}")
         .collection("message")
         .add({
       "msg": model!.msg,
       "name": model.name,
+      "id": model.id,
       "date": model.date,
       "time": model.time,
     });
-    await fireDb.collection("chat").doc("$myUid-${fProfile.uid}").set({
+    await fireDb.collection("chat").doc(fProfile!.docId!=null?fProfile.docId:"$myUid-${fProfile.uid}").set({
       'date1': [
         myProfile!.name,
         myProfile.uid,
@@ -98,5 +99,13 @@ class FireDbHelper {
         fProfile.mobile
       ]
     });
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> chatContact(){
+    return fireDb.collection("chat").snapshots();
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> readChat(String docID){
+    return fireDb.collection("chat").doc(docID).collection("message").snapshots();
   }
 }
