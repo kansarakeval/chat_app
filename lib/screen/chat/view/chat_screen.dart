@@ -68,24 +68,56 @@ class _ChatScreenState extends State<ChatScreen> {
                         }
                       }
                       return Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(
+                            left: 10, right: 10, bottom: 100),
                         child: ListView.builder(
+                          reverse: true,
                           itemCount: massageList.length,
                           itemBuilder: (context, index) {
                             return Align(
                               alignment: massageList[index].id ==
                                       FireAuthHelper.fireAuthHelper.user!.uid
-                                  ? Alignment.bottomLeft
-                                  : Alignment.centerRight,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    "${massageList[index].name}",
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ? Alignment.centerRight
+                                  : Alignment.bottomLeft,
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                margin: EdgeInsets.only(top: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.black12,
+                                  border: Border.all(color: Colors.black),
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(
+                                        massageList[index].id ==
+                                                FireAuthHelper
+                                                    .fireAuthHelper.user!.uid
+                                            ? 10
+                                            : 0),
+                                    bottomRight: Radius.circular(
+                                        massageList[index].id ==
+                                                FireAuthHelper
+                                                    .fireAuthHelper.user!.uid
+                                            ? 0
+                                            : 10),
                                   ),
-                                  Text("${massageList[index].msg}"),
-                                ],
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: massageList[index].id ==
+                                          FireAuthHelper
+                                              .fireAuthHelper.user!.uid
+                                      ? CrossAxisAlignment.end
+                                      : CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${massageList[index].name}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text("${massageList[index].msg}"),
+                                  ],
+                                ),
                               ),
                             );
                           },
