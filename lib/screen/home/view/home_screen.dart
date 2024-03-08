@@ -13,11 +13,24 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print("${state.name}");
+  }
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     getProfile();
+  }
+
+  @override
+  void dispose(){
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+
   }
 
   Future<void> getProfile() async {
