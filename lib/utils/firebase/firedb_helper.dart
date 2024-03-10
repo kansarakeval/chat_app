@@ -119,4 +119,9 @@ class FireDbHelper {
         .orderBy("time", descending: true)
         .snapshots();
   }
+
+  void deleteMessage(String docID,String msgDocID)
+  async {
+    await fireDb.collection("chat").doc(docID).collection("massage").doc(msgDocID).delete();
+  }
 }

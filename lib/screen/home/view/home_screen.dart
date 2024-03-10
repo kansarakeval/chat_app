@@ -1,6 +1,7 @@
 import 'package:chat_app/screen/profile/model/profile_model.dart';
 import 'package:chat_app/utils/firebase/fireauth_helper.dart';
 import 'package:chat_app/utils/firebase/firedb_helper.dart';
+import 'package:chat_app/utils/services/notification_services.dart';
 import 'package:chat_app/utils/theme/text_theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,13 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     print("${state.name}");
   }
+
   @override
   void initState() {
     super.initState();
@@ -27,10 +29,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
   }
 
   @override
-  void dispose(){
+  void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-
   }
 
   Future<void> getProfile() async {
@@ -44,6 +45,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
         title: const Text("ChatApp"),
         centerTitle: true,
         actions: [
+          IconButton(
+            onPressed: () {
+              NotificationServices.services.largeImageNotification();
+            },
+            icon: const Icon(Icons.notifications_none),
+          ),
           IconButton(
             onPressed: () async {
               await FireAuthHelper.fireAuthHelper.signOut();
@@ -108,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
               itemBuilder: (context, index) {
                 return ListTile(
                   onTap: () {
-                    Get.toNamed('chat',arguments: chatConact[index]);
+                    Get.toNamed('chat', arguments: chatConact[index]);
                   },
                   title: Text("${chatConact[index].name}"),
                   subtitle: Text("${chatConact[index].mobile}"),
