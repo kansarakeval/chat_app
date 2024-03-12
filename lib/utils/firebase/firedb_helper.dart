@@ -1,6 +1,7 @@
 import 'package:chat_app/screen/chat/model/chat_model.dart';
 import 'package:chat_app/screen/profile/model/profile_model.dart';
 import 'package:chat_app/utils/firebase/fireauth_helper.dart';
+import 'package:chat_app/utils/services/notification_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FireDbHelper {
@@ -25,6 +26,7 @@ class FireDbHelper {
         "email": p1.email,
         "address": p1.address,
         "image": p1.image,
+        "notificationToken": p1.notificationToken
       },
     );
   }
@@ -61,6 +63,7 @@ class FireDbHelper {
         image: data['image'],
         mobile: data['mobile'],
         uid: data['uid'],
+        notificationToken: data['notificationToken']
       );
     }
   }
@@ -93,7 +96,8 @@ class FireDbHelper {
         myProfile.address,
         myProfile.bio,
         myProfile.email,
-        myProfile.mobile
+        myProfile.mobile,
+        myProfile.notificationToken
       ],
       'date2': [
         fProfile.name,
@@ -102,9 +106,11 @@ class FireDbHelper {
         fProfile.address,
         fProfile.bio,
         fProfile.email,
-        fProfile.mobile
+        fProfile.mobile,
+        fProfile.notificationToken
       ]
     });
+    NotificationServices.services.postNotificationApi(fProfile.notificationToken!,model.name!,model.msg!);
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> chatContact() {

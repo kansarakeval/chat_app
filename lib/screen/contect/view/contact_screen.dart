@@ -42,6 +42,7 @@ class _ContactScreenState extends State<ContactScreen> {
                     email: m1['email'],
                     mobile: m1['mobile'],
                     address: m1['address'],
+                    notificationToken: m1['notificationToken']
                   );
 
                   contactData.add(p1);

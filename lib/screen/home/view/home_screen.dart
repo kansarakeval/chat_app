@@ -91,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     bio: mainList[1][4],
                     email: mainList[1][5],
                     mobile: mainList[1][6],
+                    notificationToken: mainList[1][7],
                     docId: x.id,
                   );
                   chatConact.add(p1);
@@ -104,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     bio: mainList[0][4],
                     email: mainList[0][5],
                     mobile: mainList[0][6],
+                    notificationToken: mainList[0][7],
                     docId: x.id,
                   );
                   chatConact.add(p1);
