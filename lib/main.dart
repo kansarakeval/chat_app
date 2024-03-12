@@ -1,6 +1,7 @@
 import 'package:chat_app/utils/app_routes.dart';
 import 'package:chat_app/utils/services/notification_services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,12 +12,13 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseMessaging.onBackgroundMessage(
+      NotificationServices.services.firebaseMessagingBackgroundHandler);
 
   NotificationServices.services.initNotification();
-  runApp(
-    GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: app_route,
-    )
-  );
+  NotificationServices.services.getFCM();
+  runApp(GetMaterialApp(
+    debugShowCheckedModeBanner: false,
+    routes: app_route,
+  ));
 }

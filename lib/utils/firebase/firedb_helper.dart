@@ -79,6 +79,7 @@ class FireDbHelper {
       "id": model.id,
       "date": model.date,
       "time": model.time,
+      "timestamp":Timestamp.now()
     });
     await fireDb
         .collection("chat")
@@ -115,13 +116,16 @@ class FireDbHelper {
         .collection("chat")
         .doc(docID)
         .collection("message")
-        .orderBy("date", descending: true)
-        .orderBy("time", descending: true)
+        .orderBy('timestamp',descending: true)
         .snapshots();
   }
 
-  void deleteMessage(String docID,String msgDocID)
-  async {
-    await fireDb.collection("chat").doc(docID).collection("message").doc(msgDocID).delete();
+  void deleteMessage(String docID, String msgDocID) async {
+    await fireDb
+        .collection("chat")
+        .doc(docID)
+        .collection("message")
+        .doc(msgDocID)
+        .delete();
   }
 }
