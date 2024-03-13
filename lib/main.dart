@@ -12,11 +12,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  NotificationServices.services.getFCM();
   FirebaseMessaging.onBackgroundMessage(
       NotificationServices.services.firebaseMessagingBackgroundHandler);
 
   NotificationServices.services.initNotification();
-  NotificationServices.services.getFCM();
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     routes: app_route,

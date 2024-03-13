@@ -8,7 +8,6 @@ import 'package:chat_app/utils/firebase/firedb_helper.dart';
 import 'package:chat_app/utils/firebase/storage.dart';
 import 'package:chat_app/utils/services/notification_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -60,11 +59,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Obx(
                         () =>
-                            controller.imagePath.value == null || image == null
+                            controller.imagePath.value == null && image == null
                                 ? CircleAvatar(
                                     radius: 50,
                                   )
-                                : controller.imagePath.value == null
+                                : controller.imagePath.value != null
                                     ? CircleAvatar(
                                         radius: 50,
                                         backgroundImage: FileImage(
@@ -113,7 +112,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: 20,
                       ),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                            String? path;
+                            if(controller.imagePath.value!=null)
+                              {
+                                path = await FireStorage.fireStorage.uploadProfile(controller.imagePath.value!);
+                              }
                           ProfileModel p1 = ProfileModel(
                               uid: FireAuthHelper.fireAuthHelper.user!.uid,
                               name: txtName.text,
@@ -121,11 +125,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               bio: txtBio.text,
                               email: txtEmail.text,
                               address: txtAddress.text,
-                              image: null,
+                              image: controller.imagePath.value!=null?path:image,
                               notificationToken:
                                   NotificationServices.services.token);
-                          FireStorage.fireStorage.uploadProfile(controller.imagePath.value!);
-                          // FireDbHelper.fireDbHelper.addProfileData(p1);
+                          FireDbHelper.fireDbHelper.addProfileData(p1);
                           Get.offAllNamed('dash');
                         },
                         child: Text("Save"),
